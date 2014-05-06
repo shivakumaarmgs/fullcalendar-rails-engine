@@ -102,7 +102,8 @@ module FullcalendarEngine
     end
 
     def event_params
-      params.require(:event).permit('title', 'description', 'starttime', 'endtime', 'all_day', 'period', 'frequency', 'commit_button')
+      Rails.logger.info "=======================================#{params}"
+      params.require(:event).permit('title', 'description', 'starttime', 'endtime', 'all_day', 'period', 'frequency', 'commit_button', 'untildate')
     end
 
     def determine_event_type
@@ -110,6 +111,7 @@ module FullcalendarEngine
         @event = Event.new(event_params)
       else
         @event = EventSeries.new(event_params)
+        nil.test!
       end
     end
 

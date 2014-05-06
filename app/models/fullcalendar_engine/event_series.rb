@@ -9,7 +9,7 @@ module FullcalendarEngine
 
     after_create :create_events_until_end_time
 
-    def create_events_until_end_time(end_time=RECURRING_EVENTS_UPTO)
+    def create_events_until_end_time(end_time=untildate)
       old_start_time   = starttime
       old_end_time     = endtime
       frequency_period = recurring_period(period)

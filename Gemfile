@@ -9,3 +9,4 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+gem 'better_errors'

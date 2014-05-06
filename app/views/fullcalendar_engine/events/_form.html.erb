@@ -31,6 +31,11 @@
   <%=f.label :frequency, "Repeat every" %>
   <%=f.select :frequency, (1..30).to_a %> <span id = "period"></span>
 </p>
+
+<p>
+  <%=f.label :untildate, "Until" %></br>
+  <%=text_field_tag :untildate %>
+</p>
 <p>
   <%=f.submit %> <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>
 </p>

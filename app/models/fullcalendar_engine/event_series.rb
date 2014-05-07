@@ -1,7 +1,7 @@
 module FullcalendarEngine
   class EventSeries < ActiveRecord::Base
     
-    attr_accessor :title, :description, :commit_button
+    attr_accessor :title, :description, :commit_button, :untildate
 
     validates :frequency, :period, :starttime, :endtime, :title, :description, :presence => true
 
@@ -15,7 +15,11 @@ module FullcalendarEngine
       frequency_period = recurring_period(period)
       new_start_time, new_end_time = old_start_time, old_end_time
 
-      while frequency.send(frequency_period).from_now(old_start_time) <= end_time
+      end_time = untildate + starttime.strftime("%H").to_i.hours + starttime.strftime("%M").to_i.minutes + starttime.strftime("%S").to_i.seconds
+
+      Rails.logger.info "===============================> #{end_time}"
+
+      while new_start_time <= (end_time)
         self.events.create( 
                             :title => title, 
                             :description => description, 
@@ -34,6 +38,8 @@ module FullcalendarEngine
             new_start_time = new_end_time = nil
           end
         end
+        Rails.logger.info "==============================> #{new_start_time}"
+        Rails.logger.info "==============================> #{new_start_time <= (end_time)}"
       end
     end
 

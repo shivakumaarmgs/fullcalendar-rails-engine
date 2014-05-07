@@ -111,7 +111,7 @@ module FullcalendarEngine
         @event = Event.new(event_params)
       else
         @event = EventSeries.new(event_params)
-        nil.test!
+        Rails.logger.info "====================================================#{@event}"
       end
     end
 

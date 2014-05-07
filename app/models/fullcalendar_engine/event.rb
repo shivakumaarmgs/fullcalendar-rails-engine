@@ -1,7 +1,7 @@
 module FullcalendarEngine
   class Event < ActiveRecord::Base
 
-    attr_accessor :period, :frequency, :commit_button
+    attr_accessor :period, :frequency, :commit_button, :untildate
 
     validates :title, :description, :presence => true
     validate :validate_timings

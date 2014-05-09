@@ -1,10 +1,12 @@
 module FullcalendarEngine
   class Event < ActiveRecord::Base
 
-    attr_accessor :period, :frequency, :commit_button, :untildate, :type, :classroom
+    attr_accessor :period, :frequency, :commit_button
 
     validates :title, :description, :presence => true
     validate :validate_timings
+    validates :event_type, :presence => true
+    after_create :determine_classroom
 
     belongs_to :event_series
 
@@ -15,6 +17,12 @@ module FullcalendarEngine
       :months    => "Monthly",
       :years     => "Yearly"
     }
+
+    def determine_classroom
+      if event_type == 'Schedule'
+        self.update_attributes(classroom: "NONE")
+      end
+    end
 
     def validate_timings
       if (starttime >= endtime) and !all_day

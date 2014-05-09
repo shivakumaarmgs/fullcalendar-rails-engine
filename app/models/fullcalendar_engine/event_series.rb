@@ -25,7 +25,10 @@ module FullcalendarEngine
                             :description => description, 
                             :all_day => all_day, 
                             :starttime => new_start_time, 
-                            :endtime => new_end_time
+                            :endtime => new_end_time,
+                            :event_type => event_type,
+                            :classroom => classroom,
+                            :untildate => untildate
                           )
         new_start_time = old_start_time = frequency.send(frequency_period).from_now(old_start_time)
         new_end_time   = old_end_time   = frequency.send(frequency_period).from_now(old_end_time)

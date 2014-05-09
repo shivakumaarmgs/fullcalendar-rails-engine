@@ -5,7 +5,7 @@ class CreateFullcalendarEngineEventSeries < ActiveRecord::Migration
       t.string :period, :default => 'monthly'
       t.datetime :starttime
       t.datetime :endtime
-      t.string :type
+      t.string :event_type
       t.string :classroom
       t.date :untildate
       t.boolean :all_day, :default => false

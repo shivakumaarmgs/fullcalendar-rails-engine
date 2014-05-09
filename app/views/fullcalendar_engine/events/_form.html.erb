@@ -32,7 +32,7 @@
   <%=f.select :frequency, (1..30).to_a %> <span id = "period"></span>
   <br/></br>
   <%=f.label :untildate, "Until" %>
-  <%=f.date_select :untildate %>
+  <%=f.date_select "untildate", name: "event[untildate]" %>
 </p>
 
 <p>

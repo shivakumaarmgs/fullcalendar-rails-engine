@@ -6,6 +6,8 @@ class CreateFullcalendarEngineEvents < ActiveRecord::Migration
       t.boolean :all_day, :default => false
       t.text :description
       t.date :untildate
+      t.string :type
+      t.string :classroom
       t.integer :event_series_id
       t.timestamps
     end

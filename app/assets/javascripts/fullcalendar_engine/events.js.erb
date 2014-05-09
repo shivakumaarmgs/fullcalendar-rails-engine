@@ -154,6 +154,18 @@ FullcalendarEngine = {
         default:
           $('#frequency').hide();
       }
+    },
+    showClassroom: function(value){
+      switch (value) {
+        case 'Activity':
+          $('#classroom').show();
+          break;
+        case 'Lunch':
+          $('#classroom').show();
+          break;
+        default:
+          $('#classroom').hide();
+      }
     }
   },
   setTime: function(type, time) {

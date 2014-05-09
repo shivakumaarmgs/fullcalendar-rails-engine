@@ -1,7 +1,7 @@
 module FullcalendarEngine
   class Event < ActiveRecord::Base
 
-    attr_accessor :period, :frequency, :commit_button, :untildate
+    attr_accessor :period, :frequency, :commit_button, :untildate, :type, :classroom
 
     validates :title, :description, :presence => true
     validate :validate_timings
@@ -15,7 +15,7 @@ module FullcalendarEngine
       :months    => "Monthly",
       :years     => "Yearly"
     }
-    
+
     def validate_timings
       if (starttime >= endtime) and !all_day
         errors[:base] << "Start Time must be less than End Time"

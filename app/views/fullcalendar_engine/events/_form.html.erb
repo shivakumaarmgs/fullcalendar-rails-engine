@@ -24,6 +24,14 @@
   <%=f.check_box :all_day %>
 </p>
 <p>
+  <%=f.label :type %>
+  <%=f.select :type, ["Schedule","Activity", "Lunch"], {}, onchange: "FullcalendarEngine.Events.showClassroom(this.value);" %>
+</p>
+<p id = "classroom" style = "display:none;">
+  <%=f.label :classroom, "Class Room" %>
+  <%=f.select :classroom, ["Infant","Toddlers","Early Learners","Pre School","Pre-kindergarten"] %>
+</p>
+<p>
   <%=f.label :period, "Repeats" %>
   <%=f.select :period, FullcalendarEngine::Event::REPEATS.values, {}, onchange: "FullcalendarEngine.Events.showPeriodAndFrequency(this.value);" %>
 </p>

@@ -23,7 +23,7 @@ module FullcalendarEngine
       if event_type == 'Schedule'
         self.update_attributes(classroom: "NONE")
       end
-      self.update_attributes(day_care_id: current_user.day_care.id)
+      self.update_attributes(day_care_id: main_app.current_user.day_care.id)
     end
 
     def validate_timings

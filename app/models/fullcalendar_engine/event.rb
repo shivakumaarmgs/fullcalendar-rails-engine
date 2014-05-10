@@ -9,6 +9,7 @@ module FullcalendarEngine
     after_create :determine_classroom
 
     belongs_to :event_series
+    belongs_to :day_care, class_name: "DayCare"
 
     REPEATS = {
       :no_repeat => "Does not repeat",

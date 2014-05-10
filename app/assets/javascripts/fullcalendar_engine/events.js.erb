@@ -110,7 +110,9 @@ FullcalendarEngine = {
     },
     showEventDetails: function(event){
       $('#event_desc_dialog').html('')
-      $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description")
+      $event_description  = $('<div />').html("Description    :   " + event.description).attr("id", "edit_event_description")
+      $event_type         = $('<div />').html("Event type     :   " + event.event_type).attr("id", "edit_event_type")
+      $event_classroom    = $('<div />').html("Class Room     :   " + event.classroom).attr("id", "edit_event_classroom")
       $event_actions      = $('<div />').attr("id", "event_actions")
       $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
       $delete_event       = $('<span />').attr("id", "delete_event")
@@ -125,7 +127,11 @@ FullcalendarEngine = {
         $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete</a>");
       }
       $event_actions.append($edit_event).append(" | ").append($delete_event)
-      $('#event_desc_dialog').append($event_description).append($event_actions)
+      $('#event_desc_dialog').append($event_description).append($event_type)
+      if(event.classroom == "NONE")
+        $('#event_desc_dialog').append($event_actions)
+      else
+        $('#event_desc_dialog').append($event_classroom).append($event_actions)
       $('#event_desc_dialog').dialog({
         title: title,
         modal: true,

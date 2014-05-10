@@ -6,7 +6,7 @@ module FullcalendarEngine
     validates :title, :description, :presence => true
     validate :validate_timings
     validates :event_type, :presence => true
-    after_create :determine_classroom
+    after_create :determine_classroom_and_update_day_care_id
 
     belongs_to :event_series
     belongs_to :day_care, class_name: "DayCare"
@@ -19,10 +19,11 @@ module FullcalendarEngine
       :years     => "Yearly"
     }
 
-    def determine_classroom
+    def determine_classroom_and_update_day_care_id
       if event_type == 'Schedule'
         self.update_attributes(classroom: "NONE")
       end
+      self.update_attributes(day_care_id: current_user.day_care.id)
     end
 
     def validate_timings

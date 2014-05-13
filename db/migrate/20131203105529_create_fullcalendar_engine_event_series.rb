@@ -7,6 +7,7 @@ class CreateFullcalendarEngineEventSeries < ActiveRecord::Migration
       t.datetime :endtime
       t.string :event_type
       t.string :classroom
+      t.integer :day_care_id
       t.date :untildate
       t.boolean :all_day, :default => false
       t.timestamps

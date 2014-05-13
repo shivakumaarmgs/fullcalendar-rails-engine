@@ -7,6 +7,7 @@ module FullcalendarEngine
 
     before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize]
     before_filter :determine_event_type, only: :create
+    before_filter :authenticate_user!
 
     def create
       if @event.save
@@ -23,10 +24,11 @@ module FullcalendarEngine
     end
 
     def get_events
-      @events = Event.where('starttime  >= :start_time and 
+      @events = current_user.day_care.events.where('starttime  >= :start_time and 
                             endtime     <= :end_time',
                             start_time: Time.at(params['start'].to_i).to_formatted_s(:db),
-                            end_time:   Time.at(params['end'].to_i).to_formatted_s(:db))
+                            end_time:   Time.at(params['end'].to_i).to_formatted_s(:db),
+                          )
       events = []
       @events.each do |event|
         events << { id: event.id,
@@ -37,6 +39,7 @@ module FullcalendarEngine
                     allDay: event.all_day,
                     event_type: event.event_type,
                     classroom: event.classroom,
+                    color: set_event_color(event.event_type),
                     recurring: (event.event_series_id) ? true : false }
       end
       render json: events.to_json
@@ -110,8 +113,20 @@ module FullcalendarEngine
     def determine_event_type
       if params[:event][:period] == "Does not repeat"
         @event = Event.new(event_params)
+        @event.day_care_id = current_user.day_care.id
       else
         @event = EventSeries.new(event_params)
+        @event.day_care_id = current_user.day_care.id
+      end
+    end
+
+    def set_event_color(event_type)
+      if event_type == "Schedule"
+        'red'
+      elsif event_type == "Activity"
+        'green'
+      else
+        'blue'
       end
     end
 

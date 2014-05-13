@@ -17,7 +17,7 @@ module FullcalendarEngine
 
       end_time = untildate + starttime.strftime("%H").to_i.hours + starttime.strftime("%M").to_i.minutes + starttime.strftime("%S").to_i.seconds
 
-      Rails.logger.info "===============================> #{end_time}"
+      Rails.logger.info "===============================> Day Care Id #{day_care_id}"
 
       while new_start_time <= (end_time)
         self.events.create( 
@@ -28,7 +28,8 @@ module FullcalendarEngine
                             :endtime => new_end_time,
                             :event_type => event_type,
                             :classroom => classroom,
-                            :untildate => untildate
+                            :untildate => untildate,
+                            :day_care_id => day_care_id
                           )
         new_start_time = old_start_time = frequency.send(frequency_period).from_now(old_start_time)
         new_end_time   = old_end_time   = frequency.send(frequency_period).from_now(old_end_time)

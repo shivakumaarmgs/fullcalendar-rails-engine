@@ -24,11 +24,11 @@ module FullcalendarEngine
     end
 
     def get_events
-      @events = current_user.day_care.events.where('starttime  >= :start_time and 
+      @events = current_day_care.events.where('starttime  >= :start_time and 
                             endtime     <= :end_time',
                             start_time: Time.at(params['start'].to_i).to_formatted_s(:db),
                             end_time:   Time.at(params['end'].to_i).to_formatted_s(:db),
-                          )
+                                                  )
       events = []
       @events.each do |event|
         events << { id: event.id,
@@ -113,10 +113,10 @@ module FullcalendarEngine
     def determine_event_type
       if params[:event][:period] == "Does not repeat"
         @event = Event.new(event_params)
-        @event.day_care_id = current_user.day_care.id
+        @event.day_care_id = current_day_care.id
       else
         @event = EventSeries.new(event_params)
-        @event.day_care_id = current_user.day_care.id
+        @event.day_care_id = current_day_care.id
       end
     end
 
@@ -133,5 +133,20 @@ module FullcalendarEngine
     def make_time_from_minute_and_day_delta(event_time)
       params[:minute_delta].to_i.minutes.from_now((params[:day_delta].to_i).days.from_now(event_time))
     end
+
+    def current_day_care
+      current_day_care = current_user.day_care
+      if current_day_care.nil?
+        if current_user.has_role? "director"
+          current_day_care = current_user.director.day_care
+        elsif current_user.has_role? "assistant_director"
+          current_day_care = current_user.assistant_director.day_care
+        else
+          current_day_care = current_user.teacher.day_care
+        end
+      end
+      current_day_care
+    end
+
   end
 end

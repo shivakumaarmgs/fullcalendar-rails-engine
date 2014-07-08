@@ -21,7 +21,7 @@ module FullcalendarEngine
 
     def determine_classroom_and_update_day_care_id
       if event_type == 'Schedule'
-        self.update_attributes(classroom: "NONE")
+        self.update_attributes(classroom: "DayCare")
       end
     end
 

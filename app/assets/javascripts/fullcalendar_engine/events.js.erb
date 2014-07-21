@@ -144,21 +144,26 @@ FullcalendarEngine = {
         case 'Daily':
           $('#period').html('day');
           $('#frequency').show();
+          $('#untildate').show();
           break;
         case 'Weekly':
           $('#period').html('week');
           $('#frequency').show();
+          $('#untildate').show();
           break;
         case 'Monthly':
           $('#period').html('month');
           $('#frequency').show();
+          $('#untildate').show();
           break;
         case 'Yearly':
           $('#period').html('year');
           $('#frequency').show();
+          $('#untildate').show();
           break;
         default:
           $('#frequency').hide();
+          $('#untildate').hide();
       }
     },
     showClassroom: function(value){
@@ -178,7 +183,7 @@ FullcalendarEngine = {
     var $year = $(type + '_1i'), $month = $(type + '_2i'), $day = $(type + '_3i'), $hour = $(type + '_4i'), $minute = $(type + '_5i')
     $year.val(time.getFullYear());
     $month.prop('selectedIndex', time.getMonth());
-    $day.prop('selectedIndex', time.getDate() - 1);
+    $day.prop('selectedIndex', time.getDate() + 1);
     $hour.prop('selectedIndex', time.getHours());
     $minute.prop('selectedIndex', time.getMinutes());
   },

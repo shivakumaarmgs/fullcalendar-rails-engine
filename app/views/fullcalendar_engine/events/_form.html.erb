@@ -1,49 +1,75 @@
-<%= form_for @event ||= FullcalendarEngine::Event.new(), :html => { id: 'event_form' } do |f| %>
-<p>
-  <%=f.label :title %>
-  <br/>
-  <%=f.text_field :title %>
-</p>
-<p>
-  <%=f.label :description %>
-  <br/>
-  <%=f.text_area :description, :rows => 4, :cols => 30 %>
-</p>
-<p>
-  <%=f.label :starttime, 'Start Time' %>
-  <br/>
-  <%=f.datetime_select :starttime %>
-</p>
-<p>
-  <%=f.label :endtime, 'End Time' %>
-  <br/>
-  <%=f.datetime_select :endtime %>
-</p>
-<p>
-  <%=f.label :all_day %>
-  <%=f.check_box :all_day %>
-</p>
-<p>
-  <%=f.label :event_type %>
-  <%=f.select :event_type, ["Schedule","Activity", "Lunch"], {}, onchange: "FullcalendarEngine.Events.showClassroom(this.value);" %>
-</p>
-<p id = "classroom" style = "display:none;">
-  <%=f.label :classroom, "Class Room" %>
+<%= form_for @event ||= FullcalendarEngine::Event.new(), :html => { id: 'event_form', class: "form-horizontal" } do |f| %>
+<div class="col-sm-12 col-12" id="form-ui-dialog-custom">
+<div class="form-group">
+  <%=f.label :event_type, class: "col-sm-1 control-label padd" %>
+  <div class="col-sm-9">
+  <%=f.select :event_type, ["Schedule","Activity", "Lunch"], {}, class: "selct2", onchange: "FullcalendarEngine.Events.showClassroom(this.value);", width: "300px;" %>
+  </div>
+</div>
+<div class="form-group" id = "classroom" style = "display:none;">
+  <%=f.label :classroom, "Class Room", class: "control-label" %>
+  <div class="col-sm-9">
   <%=f.select :classroom, ["Infant","Toddlers","Early Learners","Pre School","Pre-kindergarten"] %>
-</p>
-<p>
-  <%=f.label :period, "Repeats" %>
-  <%=f.select :period, FullcalendarEngine::Event::REPEATS.values, {}, onchange: "FullcalendarEngine.Events.showPeriodAndFrequency(this.value);" %>
-</p>
-<p id = "frequency" style = "display:none;">
-  <%=f.label :frequency, "Repeat every" %>
-  <%=f.select :frequency, (1..30).to_a %> <span id = "period"></span>
-  <br/></br>
-  <%=f.label :untildate, "Until" %>
-  <%=f.date_select "untildate", name: "event[untildate]" %>
-</p>
-
-<p>
-  <%=f.submit %> <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>
-</p>
+  </div>
+</div>
+<div class="form-group">
+  <%=f.label :title, class: "col-sm-1 control-label padd" %>
+  <div class="col-sm-9">
+  <%=f.text_field :title, class: "form-control"%>
+  </div>
+</div>
+<div class="form-group">
+  <%=f.label :description, class: "col-sm-1 control-label padd" %>
+  <div class="col-sm-9">
+  <%=f.text_area :description, :rows => 4, :cols => 30, class: "form-control" %>
+</div>
+</div>
+<div class="form-group">
+  <%=f.label :starttime, 'Start Time', class: "col-sm-1 control-label" %>
+  <div class="col-sm-9">
+    <%=f.datetime_select :starttime, class: "form-control" %>
+  </div>
+</div>
+<div class="form-group">
+  <%=f.label :endtime, 'End Time', class: "col-sm-1 control-label" %>
+  <div class="col-sm-9">
+  <%=f.datetime_select :endtime, class: "datepicker" %>
+</div>
+</div>
+<div class="form-group">
+  <%=f.label :all_day, class: "col-sm-1 control-label" %>
+  <div class="col-sm-9">
+  <%=f.check_box :all_day %>
+  </div>
+</div>
+<div class="form-group">
+  <%=f.label :period, "Repeats", class: "control-label" %>
+  <div class="col-sm-9">
+  <%=f.select :period, FullcalendarEngine::Event::REPEATS.values, {}, onchange: "FullcalendarEngine.Events.showPeriodAndFrequency(this.value);" %></div>
+</div>
+<div class="form-group" id = "frequency" style = "display:none;">
+  <%=f.label :frequency, "Repeat every", class: "control-label" %>
+  <div class="col-sm-5">
+    <%=f.select :frequency, (1..30).to_a %></div> 
+  <span class="col-sm-3" id = "period"></span>
+</div>
+<div class="form-group" id="untildate" style = "display:none;">
+  <%=f.label :untildate, "Until", class: "control-label padd" %>
+  <div class="col-sm-9">
+<%=f.date_select "untildate", name: "event[untildate]" %></div>
+</div>
+<div class="form-group pull-right">
+  <div class="col-sm-offset-3 col-sm-2">
+  <%=f.submit "Create Events", id: "create-button"%> <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>
+</div>
+</div>
+</div>
 <%end %>
+<script type="text/javascript">
+$("select.selct2").select2( { dropdownCssClass: 'ui-dialog' } );
+$("select#event_classroom").select2( {dropdownCssClass: 'ui-dialog' } );
+$("select#event_period").select2( {dropdownCssClass: 'ui-dialog' } );
+$("select#event_frequency").select2( {dropdownCssClass: 'ui-dialog' } );
+<%#$("#event_title").datepicker();%>
+</script>
+

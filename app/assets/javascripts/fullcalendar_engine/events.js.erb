@@ -91,7 +91,7 @@ FullcalendarEngine = {
       $.ajax({
         url: FullcalendarEngine.app_path() + "/events/" + event_id + "/edit",
         success: function(data) {
-          $('#edit_event_description').html(data['form']);
+          $('#event_desc_dialog').html(data['form']);
         }
       });
     },
@@ -109,24 +109,25 @@ FullcalendarEngine = {
       $('.dialog:visible').dialog('destroy');
     },
     showEventDetails: function(event){
+      $('#event_desc_dialog').addClass("show-form-ui-dialog-custom");
       $('#event_desc_dialog').html('')
-      $event_description  = $('<div />').html("Description    :   " + event.description).attr("id", "edit_event_description")
-      $event_type         = $('<div />').html("Event type     :   " + event.event_type).attr("id", "edit_event_type")
-      $event_classroom    = $('<div />').html("Class Room     :   " + event.classroom).attr("id", "edit_event_classroom")
-      $event_actions      = $('<div />').attr("id", "event_actions")
-      $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
+        $event_description  = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Description   :  </div><div class='col-sm-9'> " + event.description + "</div>").attr("id", "edit_event_description")
+      $event_type         = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Event Type   :  </div><div class='col-sm-9'> " + event.event_type + "</div>").attr("id", "edit_event_type")
+      $event_classroom    = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Class Room   :  </div><div class='col-sm-9'> " + event.classroom + "</div>").attr("id", "edit_event_classroom")
+      $event_actions      = $('<div />').attr("class", "col-sm-12").attr("id", "event_actions")
+      $edit_event         = $('<span />').attr("id", "edit_event").attr("class", "col-sm-12").html("<br/><a href = 'javascript:void(0);' class='btn btn-info btn-block' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a><br/>");
       $delete_event       = $('<span />').attr("id", "delete_event")
       if (event.recurring) {
-        title = event.title + "(Recurring)";
+        title = event.title + " (Recurring)";
         // Cannot be refactored as of now, the event bubbling of the eventClick of the fullCalendar is the culprit
-        $delete_event.html("&nbsp; <a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete Only This Occurrence</a>");
-        $delete_event.append("&nbsp;&nbsp; <a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + true + ")'>Delete All In Series</a>")
-        $delete_event.append("&nbsp;&nbsp; <a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", \"future\")'>Delete All Future Events</a>")
+        $delete_event.html("<div class='col-sm-4'> <a href = 'javascript:void(0);' class='btn btn-danger btn-block' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete Only This<br/> Occurrence</a></div>");
+        $delete_event.append("<div class='col-sm-4'> <a href = 'javascript:void(0);' class='btn btn-danger btn-block' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + true + ")'>Delete All<br/> In Series</a></div>")
+          $delete_event.append("<div class='col-sm-4'> <a href = 'javascript:void(0);' class='btn btn-danger btn-block' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", \"future\")'>Delete All<br/> Future Events</a></div>")
       } else {
         title = event.title;
         $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete</a>");
       }
-      $event_actions.append($edit_event).append(" | ").append($delete_event)
+      $event_actions.append($edit_event).append($delete_event)
       $('#event_desc_dialog').append($event_description).append($event_type)
       if(event.classroom == "NONE")
         $('#event_desc_dialog').append($event_actions)

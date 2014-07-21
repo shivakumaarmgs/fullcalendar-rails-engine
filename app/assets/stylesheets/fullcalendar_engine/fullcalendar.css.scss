@@ -4,6 +4,9 @@
  * (c) 2013 Adam Shaw
  */
 
+#create_event_dialog {
+  margin-left: -1px;
+}
 div#calendar {
   .fc {
     direction: ltr;

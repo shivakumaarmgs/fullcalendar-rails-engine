@@ -46,8 +46,8 @@ var defaults = {
 	// time formats
 	titleFormat: {
 		month: 'MMMM yyyy',
-		week: "MMM d[ yyyy]{ '&#8212;'[ MMM] d yyyy}",
-		day: 'dddd, MMM d, yyyy'
+		week: "MMMM, d,[ yyyy]{ '&#8212;'[ MMMM], d, yyyy}",
+		day: 'dddd MMMM d, yyyy'
 	},
 	columnFormat: {
 		month: 'ddd',

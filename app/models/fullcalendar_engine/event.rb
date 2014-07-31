@@ -12,7 +12,7 @@ module FullcalendarEngine
     belongs_to :day_care, class_name: "DayCare"
 
     REPEATS = {
-      :no_repeat => "Does not repeat",
+      :no_repeat => "Does Not Repeat",
       :days      => "Daily",
       :weeks     => "Weekly",
       :months    => "Monthly",

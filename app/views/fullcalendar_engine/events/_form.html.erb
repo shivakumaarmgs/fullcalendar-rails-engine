@@ -1,7 +1,7 @@
 <%= form_for @event ||= FullcalendarEngine::Event.new(), :html => { id: 'event_form', class: "form-horizontal" } do |f| %>
 <div class="col-sm-12 col-12" id="form-ui-dialog-custom">
 <div class="form-group">
-  <%=f.label :event_type, class: "col-sm-1 control-label padd" %>
+  <%=f.label :event_type, "Event Type", class: "col-sm-1 control-label padd" %>
   <div class="col-sm-9">
   <%=f.select :event_type, ["Schedule","Activity", "Lunch"], {}, class: "selct2", onchange: "FullcalendarEngine.Events.showClassroom(this.value);", width: "300px;" %>
   </div>
@@ -37,7 +37,7 @@
 </div>
 </div>
 <div class="form-group">
-  <%=f.label :all_day, class: "col-sm-1 control-label" %>
+  <%=f.label :all_day, "All Day", class: "col-sm-1 control-label" %>
   <div class="col-sm-9">
   <%=f.check_box :all_day %>
   </div>
@@ -48,7 +48,7 @@
   <%=f.select :period, FullcalendarEngine::Event::REPEATS.values, {}, onchange: "FullcalendarEngine.Events.showPeriodAndFrequency(this.value);" %></div>
 </div>
 <div class="form-group" id = "frequency" style = "display:none;">
-  <%=f.label :frequency, "Repeat every", class: "control-label" %>
+  <%=f.label :frequency, "Repeat Every", class: "control-label" %>
   <div class="col-sm-5">
     <%=f.select :frequency, (1..30).to_a %></div> 
   <span class="col-sm-3" id = "period"></span>

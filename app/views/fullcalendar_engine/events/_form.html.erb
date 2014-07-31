@@ -27,13 +27,13 @@
 <div class="form-group">
   <%=f.label :starttime, 'Start Time', class: "col-sm-1 control-label" %>
   <div class="col-sm-9">
-    <%=f.datetime_select :starttime, class: "form-control" %>
+    <%=f.datetime_select :starttime, order: [:month, :day, :year], ampm: true, class: "form-control" %>
   </div>
 </div>
 <div class="form-group">
   <%=f.label :endtime, 'End Time', class: "col-sm-1 control-label" %>
   <div class="col-sm-9">
-  <%=f.datetime_select :endtime, class: "datepicker" %>
+  <%=f.datetime_select :endtime, order: [:month, :day, :year], ampm: true, class: "form-control"%>
 </div>
 </div>
 <div class="form-group">

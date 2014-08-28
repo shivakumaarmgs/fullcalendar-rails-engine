@@ -183,9 +183,10 @@ FullcalendarEngine = {
   },
   setTime: function(type, time) {
     var $year = $(type + '_1i'), $month = $(type + '_2i'), $day = $(type + '_3i'), $hour = $(type + '_4i'), $minute = $(type + '_5i')
+      console.log("Prongs");
     $year.val(time.getFullYear());
     $month.prop('selectedIndex', time.getMonth());
-    $day.prop('selectedIndex', time.getDate() + 1);
+    $day.prop('selectedIndex', time.getDate());
     $hour.prop('selectedIndex', time.getHours());
     $minute.prop('selectedIndex', time.getMinutes());
   },

@@ -111,7 +111,7 @@ module FullcalendarEngine
     end
 
     def determine_event_type
-      if params[:event][:period] == "Does not repeat"
+      if params[:event][:period] == "Does Not Repeat"
         @event = Event.new(event_params)
         @event.day_care_id = current_day_care.id
       else

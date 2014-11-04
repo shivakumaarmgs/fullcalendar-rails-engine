@@ -19,6 +19,8 @@ module FullcalendarEngine
       :years     => "Yearly"
     }
 
+    after_create :push_notification 
+
     def determine_classroom_and_update_day_care_id
       if event_type == 'Schedule'
         self.update_attributes(classroom: "DayCare")
@@ -51,15 +53,27 @@ module FullcalendarEngine
           e.save
         end
       end
-      
+
       event_series.attributes = event
       event_series.save
     end
 
+    def push_notification
+      Rails.logger.info "------------------ PUSH NO"
+      self.day_care.devices.authorized.token_present.android.each do |device|
+        data = { 
+          "message" => "New Event Created",
+          "event_id" => "#{self.id}",
+          "type" => "calendar"
+        }
+        GCM.send_notification(device.token_id, data)
+      end
+    end
+
     private
 
-      def make_date_time(original_time, difference_time, event_time = nil)
-        DateTime.parse("#{original_time.hour}:#{original_time.min}:#{original_time.sec}, #{event_time.try(:day) || difference_time.day}-#{difference_time.month}-#{difference_time.year}")
-      end 
+    def make_date_time(original_time, difference_time, event_time = nil)
+      DateTime.parse("#{original_time.hour}:#{original_time.min}:#{original_time.sec}, #{event_time.try(:day) || difference_time.day}-#{difference_time.month}-#{difference_time.year}")
+    end 
   end
 end

@@ -19,7 +19,7 @@ module FullcalendarEngine
       :years     => "Yearly"
     }
 
-    after_create :push_notification 
+    after_create :push_notification
 
     def determine_classroom_and_update_day_care_id
       if event_type == 'Schedule'
@@ -61,12 +61,14 @@ module FullcalendarEngine
     def push_notification
       Rails.logger.info "------------------ PUSH NO"
       self.day_care.devices.authorized.token_present.android.each do |device|
-        data = { 
-          "message" => "New Event Created",
-          "event_id" => "#{self.id}",
-          "type" => "calendar"
-        }
-        GCM.send_notification(device.token_id, data)
+        if ["DayCare", "All Classroom"].include?(self.classroom) || device.parent.children.classrooms.include?(self.classroom)
+          data = { 
+            "message" => "New Event Created",
+            "event_id" => "#{self.id}",
+            "type" => "calendar"
+          }
+          GCM.send_notification(device.token_id, data)
+        end
       end
     end
 

@@ -59,9 +59,11 @@ module FullcalendarEngine
     end
 
     def push_notification
-      Rails.logger.info "------------------ PUSH NO"
+        Rails.logger.info "-------- PUSH OUTSIDE DEVICE LOOP "
       self.day_care.devices.authorized.token_present.android.each do |device|
+        Rails.logger.info "-------------#{device.parent.children.classrooms}"
         if ["DayCare", "All Classroom"].include?(self.classroom) || device.parent.children.classrooms.include?(self.classroom)
+          Rails.logger.info "------------------ PUSH IF CONDITION TRUE"
           data = { 
             "message" => "New Event Created",
             "event_id" => "#{self.id}",

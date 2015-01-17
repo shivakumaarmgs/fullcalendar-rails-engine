@@ -9,6 +9,13 @@ module FullcalendarEngine
     before_filter :determine_event_type, only: :create
     before_filter :authenticate_user!
 
+    authorize_actions_for :calendar_class, :actions => { :index => :read, new: 'create', :create => 'create', :move => 'create', :resize => 'create', :edit => 'create', update: 'create', destroy: 'create', get_events: 'read' }
+
+
+    def calendar_class
+      [ApplicationAuthorizer, {model: "calendar"}]
+    end
+
     def create
       if @event.save
         render nothing: true
@@ -18,6 +25,7 @@ module FullcalendarEngine
     end
 
     def new
+      Rails.logger.info "----------- #{Permission.first}"
       respond_to do |format|
         format.js
       end
@@ -28,7 +36,7 @@ module FullcalendarEngine
                             endtime     <= :end_time',
                             start_time: Time.at(params['start'].to_i).to_formatted_s(:db),
                             end_time:   Time.at(params['end'].to_i).to_formatted_s(:db),
-                                                  )
+                                             )
       events = []
       @events.each do |event|
         events << { id: event.id,

@@ -20,6 +20,28 @@ module FullcalendarEngine
     }
 
     after_create :push_notification
+    before_save :revert_class
+
+    def revert_class
+       
+            day_care_class = DayCare.find_by_id(self.day_care_id).daycare_class.first
+        
+        	case self.classroom
+                when day_care_class.one_year then
+		       self.classroom = "Infant"
+	        when day_care_class.one_to_two_years then
+                        self.classroom = "Toddlers"
+         	when day_care_class.two_to_three_years then
+                        self.classroom = "Early Learners"
+	        when day_care_class.three_to_four_years then
+                        self.classroom = "Pre School"
+	        when day_care_class.four_to_five_years then
+                        self.classroom = "Pre-kindergarten"
+             else
+                 Rails.logger.info "No classroom mentioned"                
+             end
+          
+    end
 
     def determine_classroom_and_update_day_care_id
       if event_type == 'Schedule'

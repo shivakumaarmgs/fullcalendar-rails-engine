@@ -117,7 +117,7 @@ FullcalendarEngine = {
       $('#event_desc_dialog').html('')
         $event_description  = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Description   :  </div><div class='col-sm-9'> " + event.description + "</div>").attr("id", "edit_event_description")
       $event_type         = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Event Type   :  </div><div class='col-sm-9'> " + event.event_type + "</div>").attr("id", "edit_event_type")
-      $event_classroom    = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Class Room   :  </div><div class='col-sm-9'> " + event.classroom + "</div>").attr("id", "edit_event_classroom")
+      $event_classroom    = $('<div />').attr("class", "col-sm-12").html("<div class='col-sm-3'>Class Room   :  </div><div class='col-sm-9'> " + calendar_custom_class(event.classroom) + "</div>").attr("id", "edit_event_classroom")
       $event_actions      = $('<div />').attr("class", "col-sm-12").attr("id", "event_actions")
       $edit_event         = $('<span />').attr("id", "edit_event").html("<div class='col-sm-12'><a href = 'javascript:void(0);' class='btn btn-info btn-block' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a></div>");
       $delete_event       = $('<span />').attr("id", "delete_event")

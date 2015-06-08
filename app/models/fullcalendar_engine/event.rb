@@ -43,28 +43,6 @@ module FullcalendarEngine
           
     end
 
-
-    def calendar_custom_class(classroom)
-       
-            day_care_class = DayCare.find_by_id(self.day_care_id).daycare_class.first
-        
-          case classroom
-          when "Infant" then
-            day_care_class.one_year
-          when "Toddlers" then
-            day_care_class.one_to_two_years
-          when "Early Learners" then
-            day_care_class.two_to_three_years
-          when "Pre School" then
-            day_care_class.three_to_four_years
-          when "Pre-kindergarten" then
-            day_care_class.four_to_five_years
-             else
-                 Rails.logger.info "No classroom mentioned"                
-             end
-          
-    end
-
     def determine_classroom_and_update_day_care_id
       if event_type == 'Schedule'
         self.update_attributes(classroom: "DayCare")

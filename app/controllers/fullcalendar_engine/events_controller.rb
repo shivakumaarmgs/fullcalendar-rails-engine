@@ -2,6 +2,7 @@ require_dependency 'fullcalendar_engine/application_controller'
 
 module FullcalendarEngine
   class EventsController < ApplicationController
+    include ApplicationHelper
 
     layout FullcalendarEngine::Configuration['layout'] || 'application'
 

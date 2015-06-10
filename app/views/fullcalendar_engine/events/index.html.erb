@@ -1,6 +1,12 @@
 <%#<p>%>
   <%#<%= link_to 'Create Event', 'javascript:void()', id: 'new_event' %>
 <%#</p>%>
+
+<div id="infants_class" data-infants= <%= current_day_care.daycare_class.first.one_year %> ></div>
+<div id="toddlers_class" data-toddlers= <%= current_day_care.daycare_class.first.one_to_two_years %> ></div>
+<div id="earlylearners_class" data-earlylearners= <%= current_day_care.daycare_class.first.two_to_three_years %> ></div>
+<div id="preschool_class" data-preschool= <%= current_day_care.daycare_class.first.three_to_four_years %> ></div>
+<div id="prekindergarten_class" data-prekindergarten= <%= current_day_care.daycare_class.first.four_to_five_years %> ></div>
 <div>
   <div class='calendar' id='calendar' style="margin:20px"></div>
 </div>

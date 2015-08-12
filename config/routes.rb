@@ -3,6 +3,8 @@ FullcalendarEngine::Engine.routes.draw do
   resources :events do 
     collection do 
       get :get_events
+      get :staff_calendar
+      get :get_staff_events
     end
     member do
       post :move

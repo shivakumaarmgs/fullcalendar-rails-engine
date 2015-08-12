@@ -8,8 +8,9 @@ module FullcalendarEngine
     before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize]
     before_filter :determine_event_type, only: :create
     before_filter :authenticate_user!
+    before_filter :check_current_user_staff, only:[:staff_calendar]
 
-    authorize_actions_for :calendar_class, :actions => { :index => :read, new: 'create', :create => 'create', :move => 'create', :resize => 'create', :edit => 'create', update: 'create', destroy: 'create', get_events: 'read' }
+    authorize_actions_for :calendar_class, :actions => { :index => :read, new: 'create', :create => 'create', :move => 'create', :resize => 'create', :edit => 'create', update: 'create', destroy: 'create', get_events: 'read',get_staff_events: 'read' , :staff_calendar => :read}
 
 
     def calendar_class
@@ -39,18 +40,44 @@ module FullcalendarEngine
                                              )
       events = []
       @events.each do |event|
-        events << { id: event.id,
-                    title: event.title,
-                    description: event.description || '', 
-                    start: event.starttime.iso8601,
-                    end: event.endtime.iso8601,
-                    allDay: event.all_day,
-                    event_type: event.event_type,
-                    classroom: event.classroom,
-                    color: set_event_color(event.event_type),
-                    recurring: (event.event_series_id) ? true : false }
+        if event.user_id.nil?
+          events << { id: event.id,
+                      title: event.title,
+                      description: event.description || '', 
+                      start: event.starttime.iso8601,
+                      end: event.endtime.iso8601,
+                      allDay: event.all_day,
+                      event_type: event.event_type,
+                      classroom: event.classroom,
+                      color: set_event_color(event.event_type),
+                      recurring: (event.event_series_id) ? true : false }
+        end
       end
       render json: events.to_json
+    end
+
+    def get_staff_events
+      @events = current_day_care.events.where('starttime  >= :start_time and 
+                            endtime     <= :end_time',
+                            start_time: Time.at(params['start'].to_i).to_formatted_s(:db),
+                            end_time:   Time.at(params['end'].to_i).to_formatted_s(:db),
+                                             )
+      staff_events = []
+      @events.each do |event|
+       if event.user_id == current_user.id || event.all_staff == true
+           staff_events << { id: event.id,
+                      title: event.title,
+                      description: event.description || '', 
+                      start: event.starttime.iso8601,
+                      end: event.endtime.iso8601,
+                      allDay: event.all_day,
+                      event_type: event.event_type,
+                      classroom: event.classroom,
+                      color: set_event_color(event.event_type),
+                      recurring: (event.event_series_id) ? true : false }
+        end
+      end
+      render json: staff_events.to_json
     end
 
     def move
@@ -105,6 +132,10 @@ module FullcalendarEngine
       render nothing: true
     end
 
+    def staff_calendar
+      
+    end
+
     private
 
     def load_event
@@ -114,8 +145,14 @@ module FullcalendarEngine
       end
     end
 
+    def check_current_user_staff
+      if current_user.role == "day_care"
+        redirect_to 'events#index'
+      end
+    end
+
     def event_params
-      params.require(:event).permit('title', 'description', 'starttime', 'endtime', 'all_day', 'period', 'frequency', 'commit_button', 'untildate', 'event_type', 'classroom')
+      params.require(:event).permit('title', 'description', 'starttime', 'endtime', 'all_day', 'period', 'frequency', 'commit_button', 'untildate', 'event_type', 'classroom', 'user_id', 'all_staff')
     end
 
     def determine_event_type

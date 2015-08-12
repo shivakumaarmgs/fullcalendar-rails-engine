@@ -1,0 +1,43 @@
+<%#<p>%>
+  <%#<%= link_to 'Create Event', 'javascript:void()', id: 'new_event' %>
+<%#</p>%>
+
+<div id="infants_class" data-infants= <%= current_day_care.daycare_class.first.one_year %> ></div>
+<div id="toddlers_class" data-toddlers= <%= current_day_care.daycare_class.first.one_to_two_years %> ></div>
+<div id="earlylearners_class" data-earlylearners= <%= current_day_care.daycare_class.first.two_to_three_years %> ></div>
+<div id="preschool_class" data-preschool= <%= current_day_care.daycare_class.first.three_to_four_years %> ></div>
+<div id="prekindergarten_class" data-prekindergarten= <%= current_day_care.daycare_class.first.four_to_five_years %> ></div>
+<div class="schedule_staff">
+<% if current_user.role != "day_care" %>
+  <div class="staff_list">
+    <%= label_tag 'staff', 'Schedule A Staff' %>
+    <%= select_tag :user_id, options_for_select(current_day_care.staffs.collect{ |u| [u.name, u.id] }), :include_blank => "Please select a staff" %>
+    <%#= label_tag 'staff', 'Schedule A Staff Group' %>
+    <%#= select_tag :staff_group, options_for_select(["Directors","Assistant Directors","Teachers","Assistant Teachers","Bookkeepers","Floaters"]) %>
+  </div> 
+<% end %>
+</div>
+  <div class='calendar' id='calendar' style="margin:20px"></div>
+<div id="event_desc_dialog" class="dialog" style="display:none;"></div>
+<div id="create_event_dialog_staff" class="dialog" style ="display:none;">
+<% if cookies[:staff_calendar_user_id].present? %>
+  <%= render 'staff_event_form' %>
+<% end %>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $('.calendar').fullCalendar(full_calendar_options);
+    // page is now ready, initialize the calendar...
+    $('#new_event').click(function(event) {
+      FullcalendarEngine.Form.display()
+      event.preventDefault();
+    });
+  });
+
+  $('#user_id').on('change', function() {
+    var staff_id = $(this).val();
+    var staff_calendar_user_id = $.cookie('staff_calendar_user_id', staff_id);
+    console.log(staff_id);
+  });
+</script>

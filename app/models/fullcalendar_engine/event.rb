@@ -22,6 +22,7 @@ module FullcalendarEngine
     after_create :push_notification
     before_save :revert_class
 
+
     def revert_class
        
             day_care_class = DayCare.find_by_id(self.day_care_id).daycare_class.first
@@ -81,17 +82,20 @@ module FullcalendarEngine
     end
 
     def push_notification
-        Rails.logger.info "-------- PUSH OUTSIDE DEVICE LOOP "
-      self.day_care.devices.authorized.token_present.android.each do |device|
-        Rails.logger.info "-------------#{device.parent.children.classrooms}"
-        if ["DayCare", "All Classroom"].include?(self.classroom) || device.parent.children.classrooms.include?(self.classroom)
-          Rails.logger.info "------------------ PUSH IF CONDITION TRUE"
-          data = { 
-            "message" => "New Event Created",
-            "event_id" => "#{self.id}",
-            "type" => "calendar"
-          }
-          GCM.send_notification(device.token_id, data)
+      Rails.logger.info "-------- #{self.user_id} "
+      unless self.user_id.present?
+          Rails.logger.info "-------- PUSH OUTSIDE DEVICE LOOP "
+        self.day_care.parent_devices.authorized.token_present.android.each do |device|
+          Rails.logger.info "-------------#{device.parent.children.classrooms}"
+          if ["DayCare", "All Classroom"].include?(self.classroom) || device.parent.children.classrooms.include?(self.classroom)
+            Rails.logger.info "------------------ PUSH IF CONDITION TRUE"
+            data = { 
+              "message" => "New Event Created",
+              "event_id" => "#{self.id}",
+              "type" => "calendar"
+            }
+            GCM.send_notification(device.token_id, data)
+          end
         end
       end
     end

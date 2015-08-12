@@ -3,13 +3,7 @@
 <div class="form-group">
   <%=f.label :event_type, "Event Type", class: "col-sm-1 control-label padd" %>
   <div class="col-sm-9">
-  <%=f.select :event_type, ["Schedule","Activity", "Meals"], {}, class: "selct2", onchange: "FullcalendarEngine.Events.showClassroom(this.value);", width: "300px;" %>
-  </div>
-</div>
-<div class="form-group" id = "classroom" style = "display:none;">
-  <%=f.label :classroom, "Class Room", class: "control-label" %>
-  <div class="col-sm-9">
-  <%=f.select :classroom, ["All Classrooms",calendar_custom_class("Infant"),calendar_custom_class("Toddlers"),calendar_custom_class("Early Learners"),calendar_custom_class("Pre School"),calendar_custom_class("Pre-kindergarten")] %>
+  <%=f.select :event_type, ["Schedule"], {}, class: "selct2", width: "300px;" %>
   </div>
 </div>
 <div class="form-group">
@@ -42,7 +36,13 @@
   <%=f.check_box :all_day %>
   </div>
 </div>
-<%=f.hidden_field :user_id, value: nil %>
+<div class="form-group">
+  <%=f.label :all_staff, "All Staff", class: "col-sm-1 control-label" %>
+  <div class="col-sm-9">
+  <%=f.check_box :all_staff %>
+  </div>
+</div>
+  <%=f.hidden_field :user_id, value: cookies[:staff_calendar_user_id] %>
 <div class="form-group">
   <%=f.label :period, "Repeats", class: "control-label" %>
   <div class="col-sm-9">

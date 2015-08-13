@@ -94,7 +94,8 @@ module FullcalendarEngine
               "event_id" => "#{self.id}",
               "type" => "calendar"
             }
-            GCM.send_notification(device.token_id, data)
+            GCM.send_notification(device.token_id, data,:identity => :key1)
+            Rails.logger.info "------------------ Pushing Completed"
           end
         end
       end

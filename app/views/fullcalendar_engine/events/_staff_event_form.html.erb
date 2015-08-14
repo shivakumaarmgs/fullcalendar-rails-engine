@@ -44,18 +44,18 @@
 </div>
   <%=f.hidden_field :user_id, value: cookies[:staff_calendar_user_id] %>
 <div class="form-group">
-  <%=f.label :period, "Repeats", class: "control-label" %>
+  <%=f.label :period, "Repeats", class: "col-sm-1 control-label" %>
   <div class="col-sm-9">
   <%=f.select :period, FullcalendarEngine::Event::REPEATS.values, {}, onchange: "FullcalendarEngine.Events.showPeriodAndFrequency(this.value);" %></div>
 </div>
 <div class="form-group" id = "frequency" style = "display:none;">
-  <%=f.label :frequency, "Repeat Every", class: "control-label" %>
+  <%=f.label :frequency, "Repeat Every", class: "col-sm-1 control-label" %>
   <div class="col-sm-5">
     <%=f.select :frequency, (1..30).to_a %></div> 
   <span class="col-sm-3" id = "period"></span>
 </div>
 <div class="form-group" id="untildate" style = "display:none;">
-  <%=f.label :untildate, "Until", class: "control-label padd" %>
+  <%=f.label :untildate, "Until", class: "col-sm-1 control-label padd" %>
   <div class="col-sm-9">
 <%=f.date_select "untildate", name: "event[untildate]" %></div>
 </div>

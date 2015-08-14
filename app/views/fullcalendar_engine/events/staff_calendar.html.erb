@@ -7,22 +7,26 @@
 <div id="earlylearners_class" data-earlylearners= <%= current_day_care.daycare_class.first.two_to_three_years %> ></div>
 <div id="preschool_class" data-preschool= <%= current_day_care.daycare_class.first.three_to_four_years %> ></div>
 <div id="prekindergarten_class" data-prekindergarten= <%= current_day_care.daycare_class.first.four_to_five_years %> ></div>
-<div class="schedule_staff">
-<% if current_user.role != "day_care" %>
-  <div class="staff_list">
-    <%= label_tag 'staff', 'Schedule A Staff' %>
-    <%= select_tag :user_id, options_for_select(current_day_care.staffs.collect{ |u| [u.name, u.id] }), :include_blank => "Please select a staff" %>
-    <%#= label_tag 'staff', 'Schedule A Staff Group' %>
-    <%#= select_tag :staff_group, options_for_select(["Directors","Assistant Directors","Teachers","Assistant Teachers","Bookkeepers","Floaters"]) %>
-  </div> 
-<% end %>
+<div class="hidden" id="staff_alert">
+  <div id="dialog_staff_alert" title="Alert!" style="padding: 1em 3em,
+        overflow: visible">
+    <p>Please Choose A Staff For Schedule!</p>
+  </div>
 </div>
-  <div class='calendar' id='calendar' style="margin:20px"></div>
+<div class="schedule_staff">
+  <% if current_user.role != "day_care" %>
+    <div class="staff_list">
+      <%#= label_tag 'staff', 'Schedule A Staff' %>
+      <%= select_tag :user_id, options_for_select(current_day_care.staffs.collect{ |u| [u.email, u.id] }), :include_blank => "Schedule A Staff" %>
+      <%#= label_tag 'staff', 'Schedule A Staff Group' %>
+      <%#= select_tag :staff_group, options_for_select(["Directors","Assistant Directors","Teachers","Assistant Teachers","Bookkeepers","Floaters"]) %>
+    </div> 
+  <% end %>
+</div>
+<div class='calendar' id='calendar' style="margin:20px"></div>
 <div id="event_desc_dialog" class="dialog" style="display:none;"></div>
 <div id="create_event_dialog_staff" class="dialog" style ="display:none;">
-<% if cookies[:staff_calendar_user_id].present? %>
   <%= render 'staff_event_form' %>
-<% end %>
 </div>
 
 <script>
@@ -41,3 +45,18 @@
     console.log(staff_id);
   });
 </script>
+<style>
+  #dialog_staff_alert {
+    padding: 1em 3em !important;
+    overflow: visible !important;
+  }
+  .ui-dialog .ui-dialog-buttonpane button {
+    margin: 0;
+    background-color: #428bca;
+    border-color: #428bca;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 12px;
+}
+</style>

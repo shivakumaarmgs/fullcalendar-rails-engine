@@ -17,7 +17,10 @@
   <% if current_user.role != "day_care" %>
     <div class="staff_list">
       <%#= label_tag 'staff', 'Schedule A Staff' %>
-      <%= select_tag :user_id, options_for_select(current_day_care.staffs.collect{ |u| [u.email, u.id] }), :include_blank => "Schedule A Staff" %>
+      <div class="hidden">
+        <% current_daycare_staffs = current_day_care.staffs.reject!{|a| a== current_day_care.user} %>
+      </div>
+      <%= select_tag :user_id, options_for_select(current_daycare_staffs.collect{ |u| [u.email, u.id] }), :include_blank => "Schedule A Staff" %>
       <%#= label_tag 'staff', 'Schedule A Staff Group' %>
       <%#= select_tag :staff_group, options_for_select(["Directors","Assistant Directors","Teachers","Assistant Teachers","Bookkeepers","Floaters"]) %>
     </div> 

@@ -7,6 +7,9 @@
 <div id="earlylearners_class" data-earlylearners= <%= current_day_care.daycare_class.first.two_to_three_years %> ></div>
 <div id="preschool_class" data-preschool= <%= current_day_care.daycare_class.first.three_to_four_years %> ></div>
 <div id="prekindergarten_class" data-prekindergarten= <%= current_day_care.daycare_class.first.four_to_five_years %> ></div>
+<%= button_to "Month Print", calendar_month_print_events_path(format: "pdf"), :class => "button",:method => :get  %>
+<%= button_to "week Print", calendar_week_print_events_path(format: "pdf"), :class => "button",:method => :get  %>
+<%= button_to "daily Print", calendar_day_print_events_path(format: "pdf"), :class => "button",:method => :get  %>
 <div>
   <div class='calendar' id='calendar' style="margin:20px"></div>
 </div>

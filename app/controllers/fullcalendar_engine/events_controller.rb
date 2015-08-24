@@ -9,7 +9,7 @@ module FullcalendarEngine
     before_filter :determine_event_type, only: :create
     before_filter :authenticate_user!
 
-    authorize_actions_for :calendar_class, :actions => { :index => :read, new: 'create', :create => 'create', :move => 'create', :resize => 'create', :edit => 'create', update: 'create', destroy: 'create', get_events: 'read' }
+    authorize_actions_for :calendar_class, :actions => { :index => :read, new: 'create', :create => 'create', :move => 'create', :resize => 'create', :edit => 'create', update: 'create', destroy: 'create', get_events: 'read',calendar_month_print: 'read',calendar_week_print: 'read',calendar_day_print: 'read' }
 
 
     def calendar_class
@@ -103,6 +103,68 @@ module FullcalendarEngine
         @event.destroy
       end
       render nothing: true
+    end
+
+    def calendar_month_print 
+      if cookies[:calendar_month]
+        get_month = Date.parse(cookies[:calendar_month])
+        start_date = get_month.to_s
+        end_date = get_month.end_of_month.to_s
+        @monthly_events = Event.where("starttime >= ? and endtime <= ? and day_care_id =? and user_id IS ?", start_date, end_date,current_day_care.id,nil)
+      end
+      respond_to do |format|
+        format.pdf do
+          pdf = PDF::CalendarEventPDF.new
+          pdf.calendar_monthly(@monthly_events,current_day_care,cookies[:calendar_month]) if cookies[:calendar_month]
+          send_data pdf.render, filename: "monthly_events.pdf",
+            type: "application/pdf",
+            disposition: "inline"
+        end
+      end
+    end
+
+    def calendar_week_print  
+      if cookies[:calendar_week]
+        week_start_and_end_date = cookies[:calendar_week]
+        splited_dates = week_start_and_end_date.split
+        if splited_dates[3].to_i == 0
+          week_start_date = splited_dates[0]+" "+splited_dates[1]+" "+splited_dates[5]
+          start_date = Date.parse(week_start_date).to_s
+          week_end_date = splited_dates[3]+" "+splited_dates[4]+" "+splited_dates[5]
+          end_date = Date.parse(week_end_date).to_s
+        else
+          week_start_date = splited_dates[0]+" "+splited_dates[1]+" "+splited_dates[4]
+          start_date = Date.parse(week_start_date).to_s
+          week_end_date = splited_dates[0]+" "+splited_dates[3]+" "+splited_dates[4]
+          end_date = Date.parse(week_end_date).to_s
+        end
+        @weekly_events = Event.where("starttime >= ? and endtime <= ? and day_care_id =? and user_id IS ?", start_date, end_date,current_day_care.id,nil)
+      end
+      respond_to do |format|
+        format.pdf do
+          pdf = PDF::CalendarEventPDF.new
+          pdf.calendar_weekly(@weekly_events,current_day_care,cookies[:calendar_week])
+          send_data pdf.render, filename: "weekly_events.pdf",
+            type: "application/pdf",
+            disposition: "inline"
+        end
+      end
+    end
+
+    def calendar_day_print
+      if cookies[:calendar_day]
+        date = Date.parse(cookies[:calendar_day]).to_s
+        @daily_events = Event.where("date(starttime) in (?) and day_care_id =? and user_id IS?", date,current_day_care.id,nil)
+      end
+      respond_to do |format|
+          format.pdf do
+            pdf = PDF::CalendarEventPDF.new
+            pdf.calendar_daily(@daily_events,current_day_care,cookies[:calendar_day])
+            send_data pdf.render, filename: "daily_events.pdf",
+              type: "application/pdf",
+              disposition: "inline"
+          end
+        end
     end
 
     private

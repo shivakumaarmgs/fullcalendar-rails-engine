@@ -3,6 +3,9 @@ FullcalendarEngine::Engine.routes.draw do
   resources :events do 
     collection do 
       get :get_events
+      get :calendar_month_print
+      get :calendar_week_print
+      get :calendar_day_print
     end
     member do
       post :move

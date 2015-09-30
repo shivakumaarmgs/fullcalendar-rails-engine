@@ -64,7 +64,7 @@ module FullcalendarEngine
                                              )
       staff_events = []
       @events.each do |event|
-       if event.user_id == current_user.id || event.all_staff == true
+       if event.user_id.present?
            staff_events << { id: event.id,
                       title: event.title,
                       description: event.description || '', 

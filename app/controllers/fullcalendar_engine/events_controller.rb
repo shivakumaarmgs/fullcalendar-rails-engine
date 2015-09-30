@@ -145,12 +145,19 @@ module FullcalendarEngine
       respond_to do |format|
         format.html
         format.pdf do
-          # nil.test!
-          render :pdf => "#{cookies[:calendar_month]}_events",
-          template: "pdf/calendar_month_print.html.erb",
+          render :pdf => "#{cookies[:calendar_month].to_date.strftime("%B-%Y")}_events",
+          template: "calendar_pdf/calendar_month_print.html.erb",
           layout: 'pdf.html.erb',   
-          page_size: 'A4'        
-          # :margin => { :top => 25, :bottom => 35}
+          page_size: 'Letter',
+          header:  
+            {   
+              html: 
+               {            
+                  template: 'calendar_pdf/header.html.erb',  # use :template OR :url
+                  layout:   'pdf.html.erb',
+                } 
+            },    
+          :margin => { :top => 30, :bottom => 15}
           # pdf = PDF::CalendarEventPDF.new
           # pdf.calendar_monthly(@monthly_events,current_day_care,cookies[:calendar_month]) if cookies[:calendar_month]
           # send_data pdf.render, filename: "monthly_events.pdf",
@@ -176,14 +183,29 @@ module FullcalendarEngine
           end_date = Date.parse(week_end_date).to_s
         end
         @weekly_events = Event.where("starttime >= ? and endtime <= ? and day_care_id =? and user_id IS ?", start_date, end_date,current_day_care.id,nil)
+        @start_date = start_date
+        @end_date = end_date
       end
       respond_to do |format|
         format.pdf do
-          pdf = PDF::CalendarEventPDF.new
-          pdf.calendar_weekly(@weekly_events,current_day_care,cookies[:calendar_week])
-          send_data pdf.render, filename: "weekly_events.pdf",
-            type: "application/pdf",
-            disposition: "inline"
+          render :pdf => "#{@start_date}_to_#{@end_date}_events",
+          template: "calendar_pdf/calendar_week_print.html.erb",
+          layout: 'pdf.html.erb',   
+          page_size: 'Letter',
+          header:  
+            {   
+              html: 
+               {            
+                  template: 'calendar_pdf/header.html.erb',  # use :template OR :url
+                  layout:   'pdf.html.erb',
+                } 
+            },    
+          :margin => { :top => 30, :bottom => 10}
+          # pdf = PDF::CalendarEventPDF.new
+          # pdf.calendar_weekly(@weekly_events,current_day_care,cookies[:calendar_week])
+          # send_data pdf.render, filename: "weekly_events.pdf",
+          #   type: "application/pdf",
+          #   disposition: "inline"
         end
       end
     end
@@ -195,11 +217,24 @@ module FullcalendarEngine
       end
       respond_to do |format|
           format.pdf do
-            pdf = PDF::CalendarEventPDF.new
-            pdf.calendar_daily(@daily_events,current_day_care,cookies[:calendar_day])
-            send_data pdf.render, filename: "daily_events.pdf",
-              type: "application/pdf",
-              disposition: "inline"
+            render :pdf => "#{cookies[:calendar_day].to_date.strftime("%m-%e-%Y")}_events",
+            template: "calendar_pdf/calendar_day_print.html.erb",
+            layout: 'pdf.html.erb',   
+            page_size: 'Letter',
+            header:  
+              {   
+                html: 
+                 {            
+                    template: 'calendar_pdf/header.html.erb',  # use :template OR :url
+                    layout:   'pdf.html.erb',
+                  } 
+              },    
+            :margin => { :top => 30, :bottom => 10}
+            # pdf = PDF::CalendarEventPDF.new
+            # pdf.calendar_daily(@daily_events,current_day_care,cookies[:calendar_day])
+            # send_data pdf.render, filename: "daily_events.pdf",
+            #   type: "application/pdf",
+            #   disposition: "inline"
           end
         end
     end

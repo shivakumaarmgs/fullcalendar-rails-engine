@@ -8,7 +8,7 @@ module FullcalendarEngine
     before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize]
     before_filter :determine_event_type, only: :create
     before_filter :authenticate_user!
-    before_filter :check_current_user_staff, only:[:staff_calendar]
+    # before_filter :check_current_user_staff, only:[:staff_calendar]
 
     authorize_actions_for :calendar_class, :actions => { :index => :read, new: 'create', :create => 'create', :move => 'create', :resize => 'create', :edit => 'create', update: 'create', destroy: 'create', get_events: 'read',get_staff_events: 'read' , :staff_calendar => :read,calendar_month_print: 'read',calendar_week_print: 'read',calendar_day_print: 'read' }
 
@@ -206,11 +206,11 @@ module FullcalendarEngine
       end
     end
 
-    def check_current_user_staff
-      if current_user.role == "day_care"
-        redirect_to 'events#index'
-      end
-    end
+    # def check_current_user_staff
+    #   if current_user.role == "day_care"
+    #     redirect_to 'events#index'
+    #   end
+    # end
 
     def event_params
       params.require(:event).permit('title', 'description', 'starttime', 'endtime', 'all_day', 'period', 'frequency', 'commit_button', 'untildate', 'event_type', 'classroom', 'user_id', 'all_staff')

@@ -113,12 +113,19 @@ module FullcalendarEngine
         @monthly_events = Event.where("starttime >= ? and endtime <= ? and day_care_id =? and user_id IS ?", start_date, end_date,current_day_care.id,nil)
       end
       respond_to do |format|
+        format.html
         format.pdf do
-          pdf = PDF::CalendarEventPDF.new
-          pdf.calendar_monthly(@monthly_events,current_day_care,cookies[:calendar_month]) if cookies[:calendar_month]
-          send_data pdf.render, filename: "monthly_events.pdf",
-            type: "application/pdf",
-            disposition: "inline"
+          # nil.test!
+          render :pdf => "#{cookies[:calendar_month]}_events",
+          template: "pdf/calendar_month_print.html.erb",
+          layout: 'pdf.html.erb',   
+          page_size: 'A4'        
+          # :margin => { :top => 25, :bottom => 35}
+          # pdf = PDF::CalendarEventPDF.new
+          # pdf.calendar_monthly(@monthly_events,current_day_care,cookies[:calendar_month]) if cookies[:calendar_month]
+          # send_data pdf.render, filename: "monthly_events.pdf",
+          #   type: "application/pdf",
+          #   disposition: "inline"
         end
       end
     end

@@ -1,1 +1,18 @@
 $("#create_event_dialog").html("<%= escape_javascript( render partial: 'form') %>") 
+if ($('#user_id').val() != ''){
+  $("#create_event_dialog_staff").html("<%= escape_javascript( render partial: 'staff_event_form') %>") 
+}
+else{
+	$( "#dialog_staff_alert" ).dialog({
+	  dialogClass: "no-close",
+	  buttons: [
+	    {
+	      text: "OK",
+	      click: function() {
+	        $( this ).dialog( "close" );
+	      }
+	    }
+	  ]
+  });
+	$('.ui-dialog aria-describedby="create_event_dialog_staff"').hide();
+}

@@ -3,13 +3,7 @@
 <div class="form-group">
   <%=f.label :event_type, "Event Type", class: "col-sm-1 control-label padd" %>
   <div class="col-sm-9">
-  <%=f.select :event_type, ["Schedule","Activity", "Meals"], {}, class: "selct2", onchange: "FullcalendarEngine.Events.showClassroom(this.value);", width: "300px;" %>
-  </div>
-</div>
-<div class="form-group" id = "classroom" style = "display:none;">
-  <%=f.label :classroom, "Class Room", class: "control-label" %>
-  <div class="col-sm-9">
-  <%=f.select :classroom, ["All Classrooms",calendar_custom_class("Infant"),calendar_custom_class("Toddlers"),calendar_custom_class("Early Learners"),calendar_custom_class("Pre School"),calendar_custom_class("Pre-kindergarten")] %>
+  <%=f.select :event_type, ["Schedule"], {}, class: "selct2", width: "300px;" %>
   </div>
 </div>
 <div class="form-group">
@@ -42,20 +36,31 @@
   <%=f.check_box :all_day %>
   </div>
 </div>
-<%=f.hidden_field :user_id, value: nil %>
 <div class="form-group">
-  <%=f.label :period, "Repeats", class: "control-label" %>
+  <%=f.label :all_staff, "All Staff", class: "col-sm-1 control-label" %>
+  <div class="col-sm-9">
+  <%=f.check_box :all_staff %>
+  </div>
+</div>
+<% if current_user.role == "day_care" || current_user.role == "director" || current_user.role == "assistant_director"  %>
+  <%=f.hidden_field :user_id, value: cookies[:staff_calendar_user_id] %>
+<% else %>
+  <%=f.hidden_field :user_id, value: current_user.id %>
+<% end %>
+
+<div class="form-group">
+  <%=f.label :period, "Repeats", class: "col-sm-1 control-label" %>
   <div class="col-sm-9">
   <%=f.select :period, FullcalendarEngine::Event::REPEATS.values, {}, onchange: "FullcalendarEngine.Events.showPeriodAndFrequency(this.value);" %></div>
 </div>
 <div class="form-group" id = "frequency" style = "display:none;">
-  <%=f.label :frequency, "Repeat Every", class: "control-label" %>
+  <%=f.label :frequency, "Repeat Every", class: "col-sm-1 control-label" %>
   <div class="col-sm-5">
     <%=f.select :frequency, (1..30).to_a %></div> 
   <span class="col-sm-3" id = "period"></span>
 </div>
 <div class="form-group" id="untildate" style = "display:none;">
-  <%=f.label :untildate, "Until", class: "control-label padd" %>
+  <%=f.label :untildate, "Until", class: "col-sm-1 control-label padd" %>
   <div class="col-sm-9">
 <%=f.date_select "untildate", name: "event[untildate]" %></div>
 </div>

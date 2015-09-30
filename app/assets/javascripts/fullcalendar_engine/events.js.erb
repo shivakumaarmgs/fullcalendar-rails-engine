@@ -1,7 +1,50 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
+  var pagePathName= window.location.pathname;
+  if (pagePathName == '/calendar'){
+    var options ={
+      "editable":true,
+      "header":
+      {
+        "left":"prev,next today",
+        "center":"title",
+        "right":"month,agendaWeek,agendaDay"
+      },
+      "defaultView":"agendaWeek",
+      "height":500,
+      "slotMinutes":15,
+      "dragOpacity":0.5,
+      "selectable":true,
+      "timeFormat":"h:mm t{ - h:mm t}",
+      "mount_path":"/calendar",
+      "layout":"calendar",
+      "events":"/calendar/events/get_events"
+    }
+    // full_calendar_options = calendar_options
+  }
+  else if(pagePathName == '/calendar_staff'){
+    var options ={
+        "editable":true,
+        "header":
+        {
+          "left":"prev,next today",
+          "center":"title",
+          "right":"month,agendaWeek,agendaDay"
+        },
+        "defaultView":"agendaWeek",
+        "height":500,
+        "slotMinutes":15,
+        "dragOpacity":0.5,
+        "selectable":true,
+        "timeFormat":"h:mm t{ - h:mm t}",
+        "mount_path":"/calendar",
+        "layout":"calendar",
+        "events":"/calendar/events/get_staff_events"
+      }
+  }
 
-full_calendar_options = <%= FullcalendarEngine::Configuration.to_json.html_safe %>
+// full_calendar_options = <%= FullcalendarEngine::Configuration.to_json.html_safe %>
+full_calendar_options = options
 app_path              = "<%= FullcalendarEngine::Configuration["mount_path"] %>"
 
 $.extend(full_calendar_options, {
@@ -47,12 +90,20 @@ FullcalendarEngine = {
       FullcalendarEngine.setTime('#event_starttime', startTime)
       FullcalendarEngine.setTime('#event_endtime', endTime)
       $('#event_all_day').attr('checked', options['allDay'])
+      $('#event_all_staff').attr('checked', options['allStaff'])
       $('#create_event_dialog').addClass('show-form-ui-dialog-custom')
       $('#create_event_dialog').dialog({
         title: 'New Event',
         modal: true,
         width: 550,
         close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
+      });
+      $('#create_event_dialog_staff').addClass('show-form-ui-dialog-custom')
+      $('#create_event_dialog_staff').dialog({
+        title: 'New Event',
+        modal: true,
+        width: 550,
+        close: function(event, ui) { $('#create_event_dialog_staff').dialog('destroy') }
       });
     },
     fetch: function(options){
@@ -220,7 +271,7 @@ FullcalendarEngine = {
 }
 
 $(document).ready(function(){
-  $('#create_event_dialog, #event_desc_dialog').on('submit', "#event_form", function(event) {
+  $('#create_event_dialog,#create_event_dialog_staff, #event_desc_dialog').on('submit', "#event_form", function(event) {
     var $spinner = $('.spinner');
     event.preventDefault();
     $.ajax({

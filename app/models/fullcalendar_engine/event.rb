@@ -19,7 +19,7 @@ module FullcalendarEngine
       :years     => "Yearly"
     }
 
-    after_create :push_notification
+    # after_create :push_notification
     before_save :revert_class
 
     def revert_class
